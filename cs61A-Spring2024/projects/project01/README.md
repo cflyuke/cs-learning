@@ -121,7 +121,7 @@ Graphical User Interface[​](https://www.learncs.site/docs/curriculum-resource/
 
 A **graphical user interface** (GUI, for short) is provided for you. At the moment, it doesn't work because you haven't implemented the game logic. Once you complete the play function, you will be able to play a fully interactive version of Hog!
 
-Once you've done that, you can run the GUI from your terminal:
+Once you've done that, you can· run the GUI from your terminal:
 
     python3 hog_gui.py
 
