@@ -22,6 +22,25 @@ int is_transpose(int M, int N, int A[N][M], int B[M][N]);
 char transpose_submit_desc[] = "Transpose submission";
 void transpose_submit(int M, int N, int A[N][M], int B[M][N])
 {
+    int blockSize = 8; // 选择合适的块大小
+    int i, j, ii, jj, tmp;
+
+    for (ii = 0; ii < N; ii += blockSize) {
+        for (jj = 0; jj < M; jj += blockSize) {
+            for (i = ii; i < ii + blockSize && i < N; i++) {
+                for (j = jj; j < jj + blockSize && j < M; j++) {
+                    if (i != j) {
+                        B[j][i] = A[i][j];
+                    } else {
+                        tmp = A[i][j];
+                    }
+                }
+                if (ii == jj) {
+                    B[i][i] = tmp;
+                }
+            }
+        }
+    }
 }
 
 /* 
