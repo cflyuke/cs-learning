@@ -1,0 +1,82 @@
+# ncopy.ys - Copy integer array and return count of positive elements
+
+# Sample arrays
+.align 4
+src:
+    .long 1
+    .long -2
+    .long 3
+    .long 0
+dst:
+    .long 0
+    .long 0
+    .long 0
+    .long 0
+
+# Program starts at address 0
+.pos 0
+init:
+    irmovl Stack, %esp   # Initialize stack pointer
+    irmovl Stack, %ebp   # Initialize base pointer
+    call Main            # Call main program
+    halt                 # Terminate program
+
+Main:
+    pushl %ebp           # Save old base pointer
+    rrmovl %esp, %ebp    # Set new base pointer
+    
+    irmovl src, %eax     # Source array pointer
+    irmovl dst, %ebx     # Destination array pointer
+    irmovl $4, %ecx      # Array length
+    
+    pushl %ecx           # Push length
+    pushl %ebx           # Push dst pointer
+    pushl %eax           # Push src pointer
+    call ncopy           # Call ncopy function
+    
+    rrmovl %ebp, %esp    # Restore stack pointer
+    popl %ebp            # Restore base pointer
+    ret                  # Return from main
+
+# int ncopy(int *src, int *dst, int len)
+ncopy:
+    pushl %ebp           # Save old base pointer
+    rrmovl %esp, %ebp    # Set new base pointer
+    pushl %esi           # Save callee-save registers
+    pushl %edi
+    
+    mrmovl 8(%ebp), %esi # Get src pointer
+    mrmovl 12(%ebp), %edi # Get dst pointer
+    mrmovl 16(%ebp), %ecx # Get length
+    xorl %eax, %eax      # Initialize count (cnt = 0)
+    
+Loop:
+    andl %ecx, %ecx      # Check if len == 0
+    je Done              # If 0, done
+    
+    mrmovl (%esi), %ebx  # Load *src
+    rmmovl %ebx, (%edi)  # Store to *dst
+    
+    andl %ebx, %ebx      # Check if value > 0
+    jle Next             # If <= 0, skip count
+    irmovl $1, %edx
+    addl %edx, %eax      # cnt++
+    
+Next:
+    irmovl $4, %edx
+    addl %edx, %esi      # src++
+    addl %edx, %edi      # dst++
+    irmovl $1, %edx
+    subl %edx, %ecx      # len--
+    jmp Loop             # Repeat
+    
+Done:
+    popl %edi            # Restore callee-save registers
+    popl %esi
+    rrmovl %ebp, %esp    # Restore stack pointer
+    popl %ebp            # Restore base pointer
+    ret                  # Return cnt in %eax
+
+# Stack starts here and grows to lower addresses
+.pos 0x100
+Stack:

@@ -1,0 +1,68 @@
+# rsum.ys - Recursively sum linked list elements
+
+# Sample linked list
+.align 4
+ele1:
+    .long 0x00a
+    .long ele2
+ele2:
+    .long 0x0b0
+    .long ele3
+ele3:
+    .long 0xc00
+    .long 0
+
+# Program starts at address 0
+.pos 0
+init:
+    irmovl Stack, %esp   # Initialize stack pointer
+    irmovl Stack, %ebp   # Initialize base pointer
+    call Main            # Call main program
+    halt                 # Terminate program
+
+Main:
+    pushl %ebp           # Save old base pointer
+    rrmovl %esp, %ebp    # Set new base pointer
+    
+    irmovl ele1, %eax    # Load address of first element
+    pushl %eax           # Push argument (list pointer)
+    call RSumList        # Call RSumList function
+    
+    rrmovl %ebp, %esp    # Restore stack pointer
+    popl %ebp            # Restore base pointer
+    ret                  # Return from main
+
+# int RSumList(list_ptr ls)
+RSumList:
+    pushl %ebp           # Save old base pointer
+    rrmovl %esp, %ebp    # Set new base pointer
+    pushl %ebx           # Save callee-save register
+    
+    mrmovl 8(%ebp), %ecx # Get list pointer (ls)
+    xorl %eax, %eax      # Initialize sum (val = 0)
+    
+    andl %ecx, %ecx      # Check if ls == NULL
+    je Done              # If NULL, done
+    
+    mrmovl (%ecx), %eax  # Get ls->val
+    pushl %eax           # Save current value
+    
+    irmovl $4, %ebx
+    addl %ebx, %ecx      # Move to next pointer
+    mrmovl (%ecx), %ecx  # ls = ls->next
+    pushl %ecx           # Push next pointer
+    call RSumList        # Recursive call
+    addl $4, %esp        # Clean up argument
+    
+    popl %ebx            # Restore current value
+    addl %ebx, %eax      # Add current value to sum
+    
+Done:
+    popl %ebx            # Restore callee-save register
+    rrmovl %ebp, %esp    # Restore stack pointer
+    popl %ebp            # Restore base pointer
+    ret                  # Return sum in %eax
+
+# Stack starts here and grows to lower addresses
+.pos 0x100
+Stack:
