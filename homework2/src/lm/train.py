@@ -46,7 +46,9 @@ def random_batch_sampler(
     """
 
     while True:
-        yield ...
+        starts = torch.randint(0, len(tokens) - seq_len + 1, (batch_size,))
+        batch = torch.stack([tokens[start:start+seq_len] for start in starts])
+        yield batch.to(device)
 
 
 def sequential_batch_sampler(
@@ -70,9 +72,14 @@ def sequential_batch_sampler(
         of tokens is not divisible by (batch_size * seq_len), you could drop
         the last batch.
     """
+    token_size = len(tokens)
+    batch_tokens = seq_len * batch_size
+    batch_num = token_size // batch_tokens
 
-    for batch in ...:
-        yield ...
+    batched_tokens = tokens[:batch_tokens*batch_num].view(batch_num, -1, seq_len)
+    
+    for batch in batched_tokens:
+        yield batch.to(device)
 
 
 def cosine_lr_schedule(
@@ -97,11 +104,12 @@ def cosine_lr_schedule(
         assert num_training_steps >= num_warmup_steps >= 0
 
         if t <= num_warmup_steps:
-            lr = ...
+            lr = max_lr * t/num_warmup_steps
         elif t >= num_training_steps:
-            lr = ...
-        else:  # t >= num_training_steps
-            lr = ...
+            lr = min_lr
+        else:
+            progress = (t - num_warmup_steps) / (num_training_steps - num_warmup_steps)
+            lr = min_lr + 0.5 * (max_lr - min_lr) * (1 + math.cos(progress * math.pi))
         return lr
 
     return get_lr
@@ -126,10 +134,11 @@ def compute_language_modeling_loss(
 
     Hint: Think about what are the groundtruth labels for next token prediction.
     """
-
-    labels = ...
-    logits = ...
-    return ...
+    labels = input_ids[:, 1:].contiguous()
+    logits = logits[:, :-1, :].contiguous()
+    labels = labels.view(-1)
+    logits = logits.view(-1, logits.size(-1))
+    return F.cross_entropy(logits, labels)
 
 
 def train(
@@ -159,20 +168,19 @@ def train(
 
     for step in (pbar := trange(num_training_steps)):
         t0 = time.time()
-        lr = ...
+        lr = lr_schedule(step)
         set_lr(optimizer, lr)
-
         for _ in range(grad_accumulation_steps):
-            # TODO: sample a batch, generate logits and compute loss
-            input_ids = ...
+            input_ids = next(batch_sampler)
             with autocast:
-                logits = ...
-            loss = ...
-            (loss / grad_accumulation_steps).backward()
+                logits = model(input_ids)
+            loss = compute_language_modeling_loss(input_ids, logits)
+            (loss/grad_accumulation_steps).backward()
             loss_f = loss.item()
             losses.append(loss_f)
+        optimizer.step()
+        optimizer.zero_grad()
 
-        # TODO: update the model using the accumulated gradients
         loss_mean = np.mean(losses).item()
 
         FLOPs_per_step = (

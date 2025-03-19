@@ -27,7 +27,8 @@ def softmax_with_temperature(
 
     # to avoid division by 0
     temperature = max(temperature, 1e-5)
-    return ...
+    logits = logits / temperature
+    return torch.softmax(logits, dim=-1)
 
 
 @torch.inference_mode()
@@ -59,9 +60,42 @@ def generate(
         sequences have equal length. `attention_mask` should be set to 0.0 for
         padding tokens, and 1.0 everywhere else.
     """
+    tokenized_prefixes = [tokenizer.encode(prefix) for prefix in prefixes]
+    max_len = max(len(tokens) for tokens in tokenized_prefixes)
+    input_ids = torch.full(
+        (len(prefixes), max_len),
+        tokenizer.eot_token,
+        dtype=torch.long,
+        device=device
+    )
+    attention_mask = torch.zeros_like(input_ids, dtype=torch.float32)
+    
+    for i, tokens in enumerate(tokenized_prefixes):
+        input_ids[i, -len(tokens):] = torch.tensor(tokens, device=device)
+        attention_mask[i, -len(tokens):] = 1.0
+    
+    generations = []
+    perplexity = 0.0
+    total_log_prob = 0.0
+    total_tokens = 0.0
 
-    generations = ...
-    perplexity = ...
+    for _ in trange(max_new_tokens):
+        logits = model(input_ids, attention_mask=attention_mask)
+
+        probs = softmax_with_temperature(logits[:, -1, :], temperature=temperature)
+        log_probs = torch.log(probs)
+        token_ids = torch.multinomial(probs, num_samples=1)
+        for i in range(len(prefixes)):
+            total_log_prob += log_probs[i, token_ids[i]].item()
+            total_tokens += 1
+        input_ids = torch.cat([input_ids, token_ids], dim = 1)
+        attention_mask = torch.cat([attention_mask, torch.ones_like(token_ids, dtype=torch.float(32))], dim = 1)
+
+    for i in range(len(prefixes)):
+        generated_ids = input_ids[i, max_len:].tolist()
+        generations.append(tokenizer.decode(generated_ids))
+    
+    perplexity = math.exp(-total_log_prob/total_tokens)
 
     print(f"Perplexity: {perplexity}")
     return generations

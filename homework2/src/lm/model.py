@@ -48,9 +48,10 @@ class MultiHeadAttention(nn.Module):
             kT: The transpose of the key vector used by multi-head attention (B x H x HD x S)
             v: The value vector used by multi-head attention (B x H x S x HD)
         """
-        q = ...
-        kT = ...
-        v = ...
+        B, S, D = x.shape
+        q = self.q_attn(x).view(B, S, self.n_head, D // self.n_head).transpose(1, 2)
+        kT = self.k_attn(x).view(B, S, self.n_head, D//self.n_head).permute(0, 2, 3, 1)
+        v = self.v_attn(x).view(B, S, self.n_head, D//self.n_head).transpose(1, 2)
 
         return q, kT, v
 
@@ -74,9 +75,9 @@ class MultiHeadAttention(nn.Module):
         Returns:
             attn: Outputs of applying multi-head attention to the inputs (B x S x D)
         """
-
+        B, H, S, _ = v.size()
         # compute the attention weights using q and kT
-        qkT =...
+        qkT = torch.matmul(q, kT)
         unmasked_attn_logits = qkT * self.scale_factor
 
         """
@@ -102,7 +103,8 @@ class MultiHeadAttention(nn.Module):
 
         Hint: torch.triu or torch.tril
         """
-        causal_mask = ...
+        causal_mask = torch.tril(torch.ones(q.size(2),q.size(2)))
+        causal_mask = causal_mask.to(q.device)
 
         """
         Sometimes, we want to pad the input sequences so that they have the same
@@ -141,26 +143,28 @@ class MultiHeadAttention(nn.Module):
         Note that `mask` needs to be on the same device as the input tensors
         q, kT and v.
         """
-
+        
         if attention_mask is None:
-            mask = causal_mask
+            mask = causal_mask.unsqueeze(0).unsqueeze(0)
         else:
-            mask = ...
-
+            mask = attention_mask[:, None, None, :]*causal_mask
+        mask = mask.expand(B, H, S, S).bool()
         """
         Fill unmasked_attn_logits with float_min wherever causal mask has value False.
 
         Hint: torch.masked_fill
         """
-        float_min = torch.finfo(q.dtype).min
-        attn_logits = ...
-        attn_weights = ...
+        attn_logits = torch.masked_fill(unmasked_attn_logits, torch.logical_not(mask), float('-inf'))
+        attn_weights = torch.softmax(attn_logits, dim=-1)
         attn_weights = self.dropout(attn_weights)
 
         # scale value by the attention weights.
-        attn = ...
-
+        attn = torch.matmul(attn_weights, v)
+        attn = torch.nan_to_num(attn, nan=0.0)
+        attn = attn.transpose(1, 2).reshape(B, S, -1)
         return attn
+
+
 
     def projection(self, attn: torch.FloatTensor) -> torch.FloatTensor:
         """Apply a dropout and a linear projection to outputs of attention"""
@@ -177,8 +181,9 @@ class MultiHeadAttention(nn.Module):
         Returns:
             y: outputs (B x S x D) of the multi-head attention module
         """
-
-        y = ...
+        q, kT, v = self.q_kT_v(x)
+        attn = self.self_attention(q, kT, v, attention_mask=attention_mask)
+        y = self.projection(attn)
         return y
 
 
@@ -208,8 +213,8 @@ class FeedForward(nn.Module):
         self.dropout to the output.
         """
 
-        y = F.gelu(...)
-        z = self.dropout(...)
+        y = F.gelu(self.linear_in(x))
+        z = self.dropout(self.linear_out(y))
         return z
 
 
@@ -249,10 +254,14 @@ class DecoderBlock(nn.Module):
         implementations should pass the tests. See explanations here:
         https://sh-tsang.medium.com/review-pre-ln-transformer-on-layer-normalization-in-the-transformer-architecture-b6c91a89e9ab
         """
+        y = self.mha(x, attention_mask=attention_mask)
+        y = self.ln_1(x + y)
 
-        return ...
+        z = self.ff(y)
+        z = self.ln_2(y + z)
+        return z
 
-
+        
 class DecoderLM(nn.Module):
     """The decoder language model."""
 
@@ -280,6 +289,8 @@ class DecoderLM(nn.Module):
             [DecoderBlock(n_embd, n_head) for _ in range(n_layer)]
         )
         self.ln = nn.LayerNorm(n_embd)
+        self.lm_head = nn.Linear(n_embd, n_vocab)
+        self.lm_head.weight = self.token_embeddings.weight
         self.dropout = nn.Dropout(self.p_dropout)
 
         # initialize weights according to nanoGPT
@@ -333,10 +344,13 @@ class DecoderLM(nn.Module):
 
         Hint: torch.cumsum
         """
-
         assert input_ids.shape[1] <= self.n_positions
-        token_embeddings = ...
-        positional_embeddings = ...
+        if attention_mask is not None:
+            positional_ids = (torch.cumsum(attention_mask, dim=-1) -1).to(dtype=torch.long)
+        else :
+            positional_ids = (torch.cumsum(torch.ones_like(input_ids), dim=-1) - 1).to(device=input_ids.device)
+        token_embeddings = self.token_embeddings(input_ids)
+        positional_embeddings = self.position_embeddings(positional_ids.clamp(min=0))
         return self.dropout(token_embeddings + positional_embeddings)
 
     def token_logits(self, x: torch.FloatTensor) -> torch.FloatTensor:
@@ -347,12 +361,8 @@ class DecoderLM(nn.Module):
 
         Returns:
             logits: logits corresponding to the predicted next token likelihoods (B x S x V)
-
-        Hint: Question 2.2.
         """
-
-        logits = ...
-        return logits
+        return self.lm_head(x)
 
     def forward(
         self,
@@ -369,14 +379,17 @@ class DecoderLM(nn.Module):
         Returns:
             logits: logits corresponding to the predicted next token likelihoods (B x S x V)
         """
-
-        logits = ...
+        logits = self.embed(input_ids, attention_mask=attention_mask)
+        for layer in self.blocks:
+            logits = layer(logits, attention_mask)
+        logits = self.ln(logits)
+        logits = self.token_logits(logits)
         return logits
 
     def _init_weights(self, module):
         if isinstance(module, nn.Linear):
             torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
-            if module.bias is not ...:
+            if module.bias is not None:
                 torch.nn.init.zeros_(module.bias)
         elif isinstance(module, nn.Embedding):
             torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
