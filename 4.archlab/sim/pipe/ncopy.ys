@@ -1,0 +1,79 @@
+#/* $begin ncopy-ys */
+##################################################################
+# ncopy.ys - Copy a src block of len ints to dst.
+# Return the number of positive ints (>0) contained in src.
+#
+# Include your name and ID here.
+#
+# Describe how and why you modified the baseline code.
+#
+##################################################################
+# Do not modify this portion
+# Function prologue.
+ncopy:	pushl %ebp		# Save old frame pointer
+	rrmovl %esp,%ebp	# Set up new frame pointer
+	pushl %esi		# Save callee-save regs
+	pushl %ebx
+	pushl %edi
+	mrmovl 8(%ebp),%ebx	# src
+	mrmovl 16(%ebp),%edx	# len
+	mrmovl 12(%ebp),%ecx	# dst
+
+##################################################################
+# You can modify this portion
+	# Loop header
+	xorl %eax,%eax		# count = 0;
+	andl %edx,%edx		# len <= 0?
+	jle Done		# if so, goto Done:
+
+Loop:	
+	# Unroll 4 times
+	mrmovl (%ebx), %esi	# read val from src...
+	rmmovl %esi, (%ecx)	# ...and store it to dst
+	andl %esi, %esi		# val <= 0?
+	jle Npos1		# if so, goto Npos1:
+	irmovl $1, %edi
+	addl %edi, %eax		# count++
+Npos1:
+	mrmovl 4(%ebx), %esi	# read val from src+4
+	rmmovl %esi, 4(%ecx)	# store to dst+4
+	andl %esi, %esi		# val <= 0?
+	jle Npos2		# if so, goto Npos2:
+	irmovl $1, %edi
+	addl %edi, %eax		# count++
+Npos2:
+	mrmovl 8(%ebx), %esi	# read val from src+8
+	rmmovl %esi, 8(%ecx)	# store to dst+8
+	andl %esi, %esi		# val <= 0?
+	jle Npos3		# if so, goto Npos3:
+	irmovl $1, %edi
+	addl %edi, %eax		# count++
+Npos3:
+	mrmovl 12(%ebx), %esi	# read val from src+12
+	rmmovl %esi, 12(%ecx)	# store to dst+12
+	andl %esi, %esi		# val <= 0?
+	jle Npos4		# if so, goto Npos4:
+	irmovl $1, %edi
+	addl %edi, %eax		# count++
+Npos4:
+	irmovl $4, %edi
+	subl %edi, %edx		# len -= 4
+	irmovl $16, %edi
+	addl %edi, %ebx		# src += 4
+	addl %edi, %ecx		# dst += 4
+	andl %edx,%edx		# len > 0?
+	jg Loop			# if so, goto Loop:
+##################################################################
+# Do not modify the following section of code
+# Function epilogue.
+Done:
+	popl %edi               # Restore callee-save registers
+	popl %ebx
+	popl %esi
+	rrmovl %ebp, %esp
+	popl %ebp
+	ret
+##################################################################
+# Keep the following label at the end of your function
+End:
+#/* $end ncopy-ys */
