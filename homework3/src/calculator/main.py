@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import torch
 import transformers
+import wandb
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from torch.utils.data import DataLoader
 from peft import LoraConfig, get_peft_model, PeftModelForCausalLM
@@ -17,6 +18,8 @@ from datasets import Dataset
 
 def main():
     """Initialize the pre-trained Pythia model"""
+    wandb.init(entity="lyrics", project="calculator", name="pythia-1b-asdiv")
+    
     model = AutoModelForCausalLM.from_pretrained(
         "EleutherAI/pythia-1b",
         device_map="auto",
@@ -77,6 +80,10 @@ def evaluate(
     print(
         f"test accuracy without calculator: {acc_no_calc:.1%}",
     )
+    wandb.log({
+        "eval/accuracy_with_calc": acc_calc,
+        "eval/accuracy_without_calc": acc_no_calc
+    })
     print("Done!")
 
 
@@ -114,6 +121,7 @@ def train(
                 opt.zero_grad()
 
             pbar.set_postfix({"loss": outputs["loss"].item()})
+            wandb.log({"train/loss": outputs["loss"].item()}, step=step)
             step += 1
 
     model.save_pretrained("pythia-1b-asdiv")

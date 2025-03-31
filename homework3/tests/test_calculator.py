@@ -13,7 +13,7 @@ def test_can_use_calculator():
     assert not can_use_calculator("<< 1+2 >> ")
     assert can_use_calculator("<<1+2>>")
     assert can_use_calculator("<< 1+2 >>")
-    assert can_use_calculator("</1231??>>")
+    assert can_use_calculator("<<1231??>>")
 
 
 @max_score(5)

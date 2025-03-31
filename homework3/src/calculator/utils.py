@@ -92,7 +92,13 @@ def can_use_calculator(s: str) -> bool:
     Hint:
         Q1.2
     """
-    return ...
+    if s.endswith('>>'):
+        if len(s.split('<<')) >= 2 and len(s.split('<<')[-1].split('>>')) == 2:
+            return True
+        else:
+            return False
+    else:
+        return False
 
 
 def use_calculator(input: str) -> str:
@@ -110,11 +116,14 @@ def use_calculator(input: str) -> str:
 
     Hint: safe_eval
     """
+    if not can_use_calculator(input):
+        return input
     try:
-        return ...
-    except:
-        # expression not well formed! fall back to next token prediction
-        return ...
+        expr = input.split('<<')[-1].split('>>')[0]
+        result = safe_eval(expr.strip())
+        return input.replace(f"<<{expr}>>", f"<<{expr}>>{result}")
+    except (ValueError, SyntaxError):
+        return input
 
 
 def extract_label(answer: str) -> float:
@@ -122,3 +131,4 @@ def extract_label(answer: str) -> float:
         return float(answer.split(">>")[1])
     except:
         return float("nan")
+
