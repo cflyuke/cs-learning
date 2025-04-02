@@ -1,17 +1,10 @@
 {
     "tests": [
         {
-            "score": 5,
-            "max_score": 5,
-            "name": "test_can_use_calculator",
-            "output": "",
-            "visibility": "visible"
-        },
-        {
-            "score": 5,
-            "max_score": 5,
-            "name": "test_use_calculator",
-            "output": "",
+            "score": 0,
+            "max_score": 0,
+            "name": "test_env",
+            "output": "    def test_env():\n>       env_info = get_env_info()\nNone\ntests/test_env.py:441:",
             "visibility": "visible"
         }
     ]

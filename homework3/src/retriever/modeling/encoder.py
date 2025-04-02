@@ -97,7 +97,7 @@ class EncoderModel(nn.Module):
         Returns:
         - similarity_matrix: tensor of shape (n_queries, n_passages)
         """
-        raise torch.matmul(q_reps, p_reps.transpose(0, 1))/temperature
+        return torch.matmul(q_reps, p_reps.transpose(0, 1))/temperature
 
     def compute_labels(self, n_queries, n_passages):
         """
