@@ -18,7 +18,7 @@ from datasets import Dataset
 
 def main():
     """Initialize the pre-trained Pythia model"""
-    wandb.init(entity="lyrics", project="calculator", name="pythia-1b-asdiv")
+    wandb.init(entity="lyrics", project="cmu-llm-2024fall", name="hw3-calculator-pythia-1b-asdiv")
     
     model = AutoModelForCausalLM.from_pretrained(
         "EleutherAI/pythia-1b",

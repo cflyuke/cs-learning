@@ -1,6 +1,7 @@
 import logging
 import os
 import sys
+import wandb
 
 from transformers import AutoTokenizer
 from transformers import (
@@ -50,6 +51,17 @@ def main():
     logger.info("MODEL parameters %s", model_args)
 
     set_seed(training_args.seed)
+    
+    # Initialize wandb
+    wandb.init(
+        project="cmu-llm-2024fall",
+        name="hw3-retriever-training",
+        config={
+            "model_args": vars(model_args),
+            "data_args": vars(data_args),
+            "training_args": vars(training_args)
+        }
+    )
 
     tokenizer = AutoTokenizer.from_pretrained(
         model_args.tokenizer_name if model_args.tokenizer_name else model_args.model_name_or_path,
@@ -69,7 +81,7 @@ def main():
 
     train_dataset = TrainDataset(data_args)
     collator = TrainCollator(data_args, tokenizer)
-
+    
     trainer = Trainer(
         model=model,
         args=training_args,
