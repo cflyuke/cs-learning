@@ -115,7 +115,18 @@ def get_rag(query_id, doc2text, query2docs, top_n, shuffle):
     Returns:
         str: white-space separeted text of top-N documents.
     """
-    raise NotImplementedError()
+    if query_id not in query2docs:
+        return ""
+    doc_ids = query2docs[query_id][:top_n]
+    if shuffle:
+        random.shuffle(doc_ids)
+    
+    texts = []
+    for doc_id in doc_ids:
+        if doc_id in doc2text:
+            texts.append(doc2text[doc_id])
+    
+    return ' '.join(texts)
 
 
 def apply_prompt(prefixes, trec_run, doc2text, query2docs):
@@ -182,14 +193,19 @@ def main():
         dataset = load_dataset('jmvcoelho/toy-corpus', split='train')
         
         docid_to_text = {}
-        raise NotImplementedError()
-        #TODO: parse the huggingface dataset, and populate docid_to_text, mapping the document identifier to its repective content.
+        for doc in dataset:
+            docid_to_text[doc['docid']] = doc['text']
 
         qid_to_topdocs = {}
 
         with open(args.augmentation_run, 'r') as h:
-            raise NotImplementedError()
-            #TODO: Read the run file, and populate qid_to_topdocs, mapping query ids to a list of top-document ids.
+            for line in h:
+                parts = hline.strip().split()
+                qid = parts[0]
+                docid = parts[2]
+                if qid not in qid_to_topdocs:
+                    qid_to_topdocs[qid] = []
+                qid_to_topdocs[qid].qppend(docid)
 
 
     else: # this means that RAG won't be performed.
