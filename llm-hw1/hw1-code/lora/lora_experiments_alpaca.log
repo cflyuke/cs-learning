@@ -1,0 +1,123 @@
+LoRA Experiment Log
+==================================================
+
+Experiment at 2025-05-10 11:04:41
+--------------------------------------------------
+PARAMETERS:
+{
+    "r": 4,
+    "lora_alpha": 1,
+    "lora_dropout": 0.05,
+    "learning_rate": 0.0003
+}
+
+RESULTS:
+Generated text:
+(checkpoint-4000)
+I love this movie because it is so real. It shows us the struggles of a child who has to deal with bullying and abuse in school, as well like being bullied by his teacher or peers at home.  I loved that he was able not only learn from these experiences but also get some perspective on what makes him unique.
+
+This film made me feel very connected towards my friends' lives too! They are all different people than myself - they have their own challenges which make them special. 
+
+It really touched every part i felt
+
+(checkpoint-8000)
+I love this movie because of / balikikliui!
+
+Training metrics:
+{'train_runtime': 4845.6681, 'train_samples_per_second': 21.463, 'train_steps_per_second': 10.732, 'total_flos': 2.526454676196557e+16, 'train_loss': 15.4244753732763364, 'epoch': 2.0, 'step': 52002}
+==================================================
+Experiment at 2025-05-10 16:06:30
+--------------------------------------------------
+PARAMETERS:
+{
+    "r": 4,
+    "lora_alpha": 1,
+    "lora_dropout": 0.05,
+    "learning_rate": 3e-05
+}
+
+RESULTS:
+Generated text:
+I love this movie because it is so well made and the acting really makes me feel like I am in a real life situation. It also has some very touching moments that make you want to cry! This film definitely deserves 5 stars if you're looking for something special, but it's worth every penny of your time!
+This was my favorite part about watching The Movie - all its characters are just amazing!!
+
+Training metrics:
+{'train_runtime': 4964.9718, 'train_samples_per_second': 20.948, 'train_steps_per_second': 10.474, 'total_flos': 1.6229765587156992e+16, 'train_loss': 2.7233195121845535, 'epoch': 2.0, 'step': 52002}
+==================================================
+
+Experiment at 2025-05-10 20:21:21
+--------------------------------------------------
+PARAMETERS:
+{
+    "r": 4,
+    "lora_alpha": 1,
+    "lora_dropout": 0.05,
+    "learning_rate": 0.0001
+}
+
+RESULTS:
+Generated text:
+I love this movie because it is so funny and I am sure that my friends will enjoy watching. It has a lot of humor, which makes me feel happy to be able for the first time ever!
+
+Training metrics:
+{'train_runtime': 5052.3584, 'train_samples_per_second': 20.585, 'train_steps_per_second': 10.293, 'total_flos': 1.598122402308096e+16, 'train_loss': 2.7863367753076367, 'epoch': 2.0, 'step': 52002}
+==================================================
+
+Experiment at 2025-05-10 21:17:37
+--------------------------------------------------
+PARAMETERS:
+{
+    "r": 4,
+    "lora_alpha": 4,
+    "lora_dropout": 0.05,
+    "learning_rate": 3e-05
+}
+
+RESULTS:
+Generated text:
+I love this movie because it is so real and touching. It shows us that life can be a lot more than just the ups-and-downs of everyday struggles, but also how we are able to overcome our fears in order for ourselves or others' lives become better.
+This film has given me hope about what I could do differently if things didn't go well with my family's plans.  This story was very inspiring!
+
+Training metrics:
+{'train_runtime': 4840.3926, 'train_samples_per_second': 21.487, 'train_steps_per_second': 10.743, 'total_flos': 1.598122402308096e+16, 'train_loss': 2.7065666204213885, 'epoch': 2.0, 'step': 52002}
+==================================================
+
+Experiment at 2025-05-11 00:55:27
+--------------------------------------------------
+PARAMETERS:
+{
+    "r": 8,
+    "lora_alpha": 8,
+    "lora_dropout": 0.05,
+    "learning_rate": 3e-05
+}
+
+RESULTS:
+Generated text:
+I love this movie because it is a great story. It tells the true and darker side of what happens when you are in need, with lots to do before your next step can be reached.
+The film also has some touching moments that make me smile every time I watches its shots.  The characters have their own quirks as well which makes for an interesting experience watching them grow up. 
+It was nice seeing how each character works out on different fronts so we could see who’s best friends or those people they’re dating
+
+Training metrics:
+{'train_runtime': 4885.5557, 'train_samples_per_second': 21.288, 'train_steps_per_second': 10.644, 'total_flos': 1.600198363373568e+16, 'train_loss': 2.985337289258758, 'epoch': 2.0, 'step': 52002}
+==================================================
+
+Experiment at 2025-06-15 05:04:01
+--------------------------------------------------
+PARAMETERS:
+{
+    "r": 8,
+    "lora_alpha": 1,
+    "lora_dropout": 0.05,
+    "learning_rate": 3e-05
+}
+
+RESULTS:
+Generated text:
+I love this movie because it is so well made and the acting really makes me feel like I am in a real life situation. It also has some very touching moments that make you want to cry! The storyline of my mom's struggles with depression, her relationship issues as she tries hard not letting go or being too emotional when things get tough for both sides but ultimately manages through them all together making us laugh out loud at times.  This film definitely needs more screen time than most movies I've seen before. 
+
+It was an amazing
+
+Training metrics:
+{'train_runtime': 3418.4031, 'train_samples_per_second': 30.425, 'train_steps_per_second': 15.212, 'total_flos': 1.6250848053313536e+16, 'train_loss': 2.7282228619679776, 'epoch': 2.0, 'step': 52002}
+==================================================
