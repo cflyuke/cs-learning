@@ -1,0 +1,182 @@
+LoRA Experiment Log
+==================================================
+
+Experiment at 2025-05-09 10:32:20
+--------------------------------------------------
+PARAMETERS:
+{
+    "r": 4,
+    "lora_alpha": 1,
+    "lora_dropout": 0.05,
+    "learning_rate": 0.03
+}
+
+RESULTS:
+Generated text:
+I love this movie because. the a, of and to is I it in that was for with film on as but at you not have all are one's /><br /> from has like just so about who<br good his an me The byed really! be) my or" what watching ( very some there even outing more storyly they he time? great if well were see " her characters their any up will other never into which would does no being been get it's - too can your way badable could think also
+
+Training metrics:
+{'train_runtime': 346.9971, 'train_samples_per_second': 17.285, 'train_steps_per_second': 17.285, 'total_flos': 3922686368612352.0, 'train_loss': 7.388728697326192, 'epoch': 2.0, 'step': 5998}
+==================================================
+
+Experiment at 2025-05-09 10:39:06
+--------------------------------------------------
+PARAMETERS:
+{
+    "r": 6,
+    "lora_alpha": 1,
+    "lora_dropout": 0.05,
+    "learning_rate": 0.03
+}
+
+RESULTS:
+Generated text:
+I love this movie because the., a of and to is it I in that was as The for with but<br /><br film ( you not on have /> one be at about all are his's who so like by from what out! good very an just)" really me hasing he or story - some there myed great " they see... time if would more were will no? up well been even we which get your their other charactersly it's being hers how does than could any watching tooable over bad
+
+Training metrics:
+{'train_runtime': 346.5137, 'train_samples_per_second': 17.31, 'train_steps_per_second': 17.31, 'total_flos': 3925234153488384.0, 'train_loss': 7.570473442319315, 'epoch': 2.0, 'step': 5998}
+==================================================
+
+Experiment at 2025-05-09 10:45:53
+--------------------------------------------------
+PARAMETERS:
+{
+    "r": 8,
+    "lora_alpha": 1,
+    "lora_dropout": 0.05,
+    "learning_rate": 0.03
+}
+
+RESULTS:
+Generated text:
+I love this movie because, the. and to a of is in I it that /><br film as was with ( for but The<br you /> have be'sing about on one are! not his all by at good he like really very" who from an has out some if) or just so would " what there -ed great? willly me their my story time well even were been other it's A too more we they caner only than her see watching does no It could... up mades ever your characters when
+
+Training metrics:
+{'train_runtime': 347.9216, 'train_samples_per_second': 17.24, 'train_steps_per_second': 17.24, 'total_flos': 3927781938364416.0, 'train_loss': 7.866818236287096, 'epoch': 2.0, 'step': 5998}
+==================================================
+
+Experiment at 2025-05-09 10:52:41
+--------------------------------------------------
+PARAMETERS:
+{
+    "r": 4,
+    "lora_alpha": 1,
+    "lora_dropout": 0.05,
+    "learning_rate": 0.003
+}
+
+RESULTS:
+Generated text:
+I love this movie because it is so funny and I think it's the best film ever made. It has a lot of good things about it: The acting, especially by Tom Hanks (who plays an old man who was in his late 20's); all that great music from John Lennon to Michael Jackson...and some really nice songs!<br /><br />The story: This one had me laughing out loud for hours after watching it; but then when you get bored with something like these movies or if you're just tired enough not wanting
+
+Training metrics:
+{'train_runtime': 349.1924, 'train_samples_per_second': 17.177, 'train_steps_per_second': 17.177, 'total_flos': 3922686368612352.0, 'train_loss': 3.604650484080631, 'epoch': 2.0, 'step': 5998}
+==================================================
+
+Experiment at 2025-05-09 10:59:32
+--------------------------------------------------
+PARAMETERS:
+{
+    "r": 4,
+    "lora_alpha": 1,
+    "lora_dropout": 0.05,
+    "learning_rate": 0.0003
+}
+
+RESULTS:
+Generated text:
+I love this movie because it is a great story. The characters are so real and the plot really makes you want to know more about them than what they have been told in movies or TV shows, but I think that it's just too much for me at first...<br /><br />The acting was good as well! It made my heart sing when we saw her on stage with him (she's not very famous) - she looked like he had never seen anyone before!! She also played an important role during his death which has
+
+Training metrics:
+{'train_runtime': 351.8114, 'train_samples_per_second': 17.049, 'train_steps_per_second': 17.049, 'total_flos': 3922686368612352.0, 'train_loss': 3.586427673970751, 'epoch': 2.0, 'step': 5998}
+==================================================
+
+Experiment at 2025-05-09 11:06:26
+--------------------------------------------------
+PARAMETERS:
+{
+    "r": 4,
+    "lora_alpha": 4,
+    "lora_dropout": 0.05,
+    "learning_rate": 0.0003
+}
+
+RESULTS:
+Generated text:
+I love this movie because it is a great story. The characters are so real and the plot really makes you want to see more of them in action! I have seen many movies about people who were killed by their own friends, but these guys did not die from starvation or illnesses like they do with others on screen here at home...they died for something that was important enough (like being able "to be loved"). This film shows us how we can make our lives better than what other films show up as if
+
+Training metrics:
+{'train_runtime': 352.0903, 'train_samples_per_second': 17.035, 'train_steps_per_second': 17.035, 'total_flos': 3922686368612352.0, 'train_loss': 3.573608520548516, 'epoch': 2.0, 'step': 5998}
+==================================================
+
+Experiment at 2025-05-09 11:13:14
+--------------------------------------------------
+PARAMETERS:
+{
+    "r": 4,
+    "lora_alpha": 8,
+    "lora_dropout": 0.05,
+    "learning_rate": 0.0003
+}
+
+RESULTS:
+Generated text:
+I love this movie because it is a very good one. I have seen the original and loved them both, but now that I'm watching these movies on DVDs (and even though they are not as bad), i think it's worth seeing again for some of its great moments!<br /><br />The storyline was interesting to watch; however there were too many scenes where we didn't see anything happening in real life or at all - so if you want something more realistic than what we've been given then you'll need another film like "The Last
+
+Training metrics:
+{'train_runtime': 349.1557, 'train_samples_per_second': 17.179, 'train_steps_per_second': 17.179, 'total_flos': 3922686368612352.0, 'train_loss': 3.563800828303445, 'epoch': 2.0, 'step': 5998}
+==================================================
+
+Experiment at 2025-05-09 11:34:23
+--------------------------------------------------
+PARAMETERS:
+{
+    "r": 8,
+    "lora_alpha": 8,
+    "lora_dropout": 0.05,
+    "learning_rate": 0.0003
+}
+
+RESULTS:
+Generated text:
+I love this movie because it is a very good one. I have seen the original version and loved that, but now I'm going to give you another chance for your enjoyment of my favorite film: The Greatest Show on Earth!<br /><br />The story takes place in an American town where there are two different families who live together with their own problems; they both want something more than just money or fame...they also need each other's help when things go wrong....and that's what happens here.. <br/><b>This
+
+Training metrics:
+{'train_runtime': 350.8833, 'train_samples_per_second': 17.094, 'train_steps_per_second': 17.094, 'total_flos': 3927781938364416.0, 'train_loss': 3.559326863837425, 'epoch': 2.0, 'step': 5998}
+==================================================
+
+Experiment at 2025-05-11 00:48:40
+--------------------------------------------------
+PARAMETERS:
+{
+    "r": 4,
+    "lora_alpha": 1,
+    "lora_dropout": 0.1,
+    "learning_rate": 0.0003
+}
+
+RESULTS:
+Generated text:
+I love this movie because it is a great story. The characters are very real and the plot really makes you want to see more of them in action!<br /><br />The acting was excellent, especially with Tom Hanks as Dr Lyle (who plays an old friend). I think he did his best job at that part since he's not so much used for playing older people anymore than most actors do now... but still good enough!! <br/><p>This film has some wonderful songs by other famous artists such as: "When
+
+Training metrics:
+{'train_runtime': 364.1487, 'train_samples_per_second': 16.471, 'train_steps_per_second': 16.471, 'total_flos': 3922686368612352.0, 'train_loss': 3.5861932208197005, 'epoch': 2.0, 'step': 5998}
+==================================================
+
+Experiment at 2025-05-11 00:55:46
+--------------------------------------------------
+PARAMETERS:
+{
+    "r": 4,
+    "lora_alpha": 4,
+    "lora_dropout": 0.1,
+    "learning_rate": 0.0003
+}
+
+RESULTS:
+Generated text:
+I love this movie because it is a great story. The characters are so real and the plot really makes you want to see more of them in action! I have never seen anything like that before, but it's definitely worth seeing if you're looking for something new or interesting about life on Earth (or even just trying out some different things).<br /><br />The acting was excellent as well - especially when they were playing their own roles with such good chemistry between each other!! This film has been nominated several times at various awards including Best
+
+Training metrics:
+{'train_runtime': 361.2697, 'train_samples_per_second': 16.603, 'train_steps_per_second': 16.603, 'total_flos': 3922686368612352.0, 'train_loss': 3.573585584029312, 'epoch': 2.0, 'step': 5998}
+==================================================
