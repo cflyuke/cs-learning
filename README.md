@@ -6,3 +6,5 @@
 - cs229-2018autumn
 - cs231n-2024spring
 - cs61A-2024spring
+- pku-llm-2025spring
+- pku-mas-2025spring
