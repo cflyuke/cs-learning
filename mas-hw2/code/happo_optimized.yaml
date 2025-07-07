@@ -1,0 +1,172 @@
+# This is the configuration file for the Optimized HAPPO algorithm.
+seed:
+  # whether to use the specified seed
+  seed_specify: True
+  # seed
+  seed: 1
+device:
+  # whether to use CUDA
+  cuda: True
+  # whether to set CUDA deterministic
+  cuda_deterministic: True
+  # arg to torch.set_num_threads
+  torch_threads: 4
+train:
+  # number of parallel environments for training data collection
+  n_rollout_threads: 20
+  # number of total steps
+  num_env_steps: 10000000
+  # number of steps per environment per training data collection
+  episode_length: 200
+  # logging interval
+  log_interval: 5
+  # evaluation interval
+  eval_interval: 25
+  # whether to use ValueNorm
+  use_valuenorm: True
+  # whether to use linear learning rate decay
+  use_linear_lr_decay: False
+  # whether to consider the case of truncation when an episode is done
+  use_proper_time_limits: True
+  # if set, load models from this directory; otherwise, randomly initialise the models
+  model_dir: ~
+eval:
+  # whether to use evaluation
+  use_eval: True
+  # number of parallel environments for evaluation
+  n_eval_rollout_threads: 10
+  # number of episodes per evaluation
+  eval_episodes: 20
+render:
+  # whether to use render
+  use_render: False
+  # number of episodes to render
+  render_episodes: 10
+model:
+  # network parameters
+  # hidden sizes for mlp module in the network
+  hidden_sizes: [128, 128]
+  # activation function, choose from sigmoid, tanh, relu, leaky_relu, selu
+  activation_func: relu
+  # whether to use feature normalization
+  use_feature_normalization: True
+  # initialization method for network parameters, choose from xavier_uniform_, orthogonal_, ...
+  initialization_method: orthogonal_
+  # gain of the output layer of the network.
+  gain: 0.01
+  # recurrent parameters
+  # whether to use rnn policy (data is not chunked for training)
+  use_naive_recurrent_policy: False
+  # whether to use rnn policy (data is chunked for training)
+  use_recurrent_policy: False
+  # number of recurrent layers
+  recurrent_n: 1
+  # length of data chunk; only useful when use_recurrent_policy is True; episode_length has to be a multiple of data_chunk_length
+  data_chunk_length: 10
+  # optimizer parameters
+  # actor learning rate
+  lr: 0.0005
+  # critic learning rate
+  critic_lr: 0.0005
+  # eps in Adam
+  opti_eps: 0.00001
+  # weight_decay in Adam
+  weight_decay: 0
+  # parameters of diagonal Gaussian distribution
+  std_x_coef: 1
+  # parameters of diagonal Gaussian distribution
+  std_y_coef: 0.5
+algo:
+  # HAPPO parameters
+  # number of epochs for actor update
+  ppo_epoch: 2
+  # number of epochs for critic update
+  critic_epoch: 2
+  # whether to use clipped value loss
+  use_clipped_value_loss: True
+  # clip parameter (will be adapted during training)
+  clip_param: 0.2
+  # number of mini-batches per epoch for actor update
+  actor_num_mini_batch: 1
+  # number of mini-batches per epoch for critic update
+  critic_num_mini_batch: 1
+  # coefficient for entropy term in actor loss (will be adapted during training)
+  entropy_coef: 0.01
+  # coefficient for value loss
+  value_loss_coef: 1
+  # whether to clip gradient norm
+  use_max_grad_norm: True
+  # max gradient norm
+  max_grad_norm: 10.0
+  # whether to use Generalized Advantage Estimation (GAE)
+  use_gae: True
+  # discount factor
+  gamma: 0.99
+  # GAE lambda
+  gae_lambda: 0.95
+  # whether to use huber loss
+  use_huber_loss: True
+  # whether to use policy active masks
+  use_policy_active_masks: True
+  # huber delta
+  huber_delta: 10.0
+  # method of aggregating the probability of multi-dimensional actions, choose from prod, mean
+  action_aggregation: prod
+  # whether to share parameter among actors
+  share_param: False
+  # whether to use a fixed optimisation order
+  fixed_order: False
+  
+  # ========== OPTIMIZATION PARAMETERS ==========
+  
+  # Adaptive Clipping
+  # whether to use adaptive clipping based on KL divergence
+  adaptive_clip: True
+  # target KL divergence for adaptive clipping
+  target_kl: 0.01
+  # minimum clip parameter
+  min_clip_param: 0.05
+  # maximum clip parameter
+  max_clip_param: 0.3
+  
+  # Adaptive Entropy
+  # whether to use adaptive entropy coefficient
+  adaptive_entropy: True
+  # minimum entropy coefficient
+  min_entropy_coef: 0.001
+  # maximum entropy coefficient
+  max_entropy_coef: 0.1
+  
+  # KL Penalty
+  # whether to use KL penalty for policy regularization
+  use_kl_penalty: True
+  # coefficient for KL penalty
+  kl_coef: 0.2
+  
+  # Dual Clipping
+  # whether to use dual clipping for better stability
+  dual_clip: True
+  # dual clip parameter
+  dual_clip_param: 3.0
+  
+  # Value Clipping
+  # whether to use value clipping
+  use_value_clipping: True
+  
+  # Learning Rate Scheduling
+  # whether to use advanced learning rate scheduling
+  use_lr_schedule: True
+  # type of learning rate schedule: linear, cosine, exponential
+  lr_schedule_type: "cosine"
+  
+  # Experience Replay (experimental)
+  # whether to use experience replay for additional stability
+  use_experience_replay: False
+  # size of replay buffer
+  replay_buffer_size: 10000
+  # ratio of replay samples to current samples
+  replay_ratio: 0.1
+
+logger:
+  # logging directory
+  log_dir: "./results"
