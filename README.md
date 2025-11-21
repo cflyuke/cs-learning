@@ -8,3 +8,4 @@
 - cs61A-2024spring
 - pku-llm-2025spring
 - pku-mas-2025spring
+- llm-learning (some techniques)
