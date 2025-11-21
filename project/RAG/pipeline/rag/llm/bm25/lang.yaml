@@ -1,0 +1,11 @@
+zh:
+  tokenizer:
+    class: JiebaTokenizer
+    params: {}
+  filters:
+    - class: StopwordFilter
+      params:
+        language: "chinese"
+    - class: PunctuationFilter
+      params:
+        extras: ' 、＂＃＄％＆＇（）＊＋，－／：；＜＝＞＠［＼］＾＿｀｛｜｝～｟｠｢｣､〃〈〉《》「」『』【】〔〕〖〗〘〙〚〛〜〝〞〟〰–—‘’‛“”„‟…‧﹏﹑﹔·．！？｡。'
